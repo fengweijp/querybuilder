@@ -9,7 +9,7 @@ namespace SqlKata.Execution2
     public partial class SqlMapper
     { 
         public static async Task<PaginationResult<T>> PaginateAsync<T>(this IDbConnection cnn, Query query, int page, int perPage = 25,
-            QueryBuilderSettings settings=null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
+            QueryBuilderSettings settings=null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             if (page < 1)
             {
@@ -21,9 +21,9 @@ namespace SqlKata.Execution2
                 throw new ArgumentException("PerPage param should be greater than or equal to 1", nameof(perPage));
             }
 
-            var count = await cnn.CountAsync(query.AsCount(), settings, transaction, commandTimeout, commandType);
+            var count = await cnn.CountAsync<long>(query.AsCount(), settings, transaction, commandTimeout);
 
-            var list = await cnn.QueryAsync<T>(query.ForPage(page, perPage), settings, transaction, commandTimeout, commandType);
+            var list = await cnn.QueryAsync<T>(query.ForPage(page, perPage), settings, transaction, commandTimeout);
 
             return new PaginationResult<T>
             {
@@ -36,10 +36,10 @@ namespace SqlKata.Execution2
 
         }
 
-        public static async Task<PaginationResult<dynamic>> Paginate(this IDbConnection cnn, Query query, int page, int perPage = 25,
-            QueryBuilderSettings settings = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
+        public static async Task<PaginationResult<dynamic>> PaginateAsync(this IDbConnection cnn, Query query, int page, int perPage = 25,
+            QueryBuilderSettings settings = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
-            return await cnn.PaginateAsync<dynamic>(query, page, perPage, settings, transaction, commandTimeout, commandType);
+            return await cnn.PaginateAsync<dynamic>(query, page, perPage, settings, transaction, commandTimeout);
         }
     }
 }

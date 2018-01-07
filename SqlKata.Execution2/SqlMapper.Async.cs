@@ -8,6 +8,8 @@ namespace SqlKata.Execution2
 {
     public static partial class SqlMapper
     {
+        /* Generated from source via roslyn, can use improvement ;D */
+
         public static Task<IEnumerable<dynamic>> QueryAsync(this IDbConnection cnn, Query query, QueryBuilderSettings settings = null, IDbTransaction transaction = null, int? commandTimeout = null, CommandType? commandType = null)
         {
             var result = query.Build(settings);
