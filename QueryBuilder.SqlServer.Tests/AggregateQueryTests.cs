@@ -1,39 +1,15 @@
 ﻿using System;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
 using SqlKata;
-using SqlKata.Tests.Execution;
+using SqlKata.Execution2;
 using Xunit;
 
 namespace QueryBuilder.SqlServer.Tests
 {
-    public abstract class SqlDatabaseTest
-    {
-        private readonly SqlServerDatabaseFixture _database;
-
-        protected SqlDatabaseTest(SqlServerDatabaseFixture database)
-        {
-            _database = database;
-        }
-
-        protected IExecutionDatabaseFixture Database { get { return _database; } }
-
-        protected SqlConnection Connection { get { return (SqlConnection)_database.Connection; } }
-
-        protected SqlServerDatabaseFixture SqlDatabase { get { return _database; } }
-    }
-
-    [CollectionDefinition("AggregateTests")]
-    public class AggregateTestsCollection : ICollectionFixture<SqlServerDatabaseFixture>,
-        IClassFixture<SqlServerDatabaseFixture>
-    {
-
-    }
-
-    [Collection("AggregateTests")]
-    public class AggregateQueryTests : SqlDatabaseTest
+    [Collection("AggregateSimpleTests")]
+    public class AggregateQueryTests : SqlServerDatabaseTest
     {
         //TODO: Store test data in manifest resource files
         async Task SetUp()
@@ -55,10 +31,37 @@ INSERT INTO agg VALUES (5);");
         }
 
         [Fact]
+        public async Task CanCountData()
+        {
+            var query = new Query("agg");
+            var count = await Execution2.CountAsync<int>(Connection, query);
+            Assert.Equal(5, count);
+        }
+
+        [Fact]
         public async Task CanSumData()
         {
             var query = new Query("agg");
-
+            var sum = await Execution2.SumAsync<int>(Connection, query, "num");
+            Assert.Equal(15, sum);
         }
+
+        [Fact]
+        public async Task CanMaxData()
+        {
+            var query = new Query("agg");
+            var count = await Execution2.MaxAsync<int>(Connection, query,"num");
+            Assert.Equal(5, count);
+        }
+
+        [Fact]
+        public async Task CanMinData()
+        {
+            var query = new Query("agg");
+            var count = await Execution2.MinAsync<int>(Connection, query,"num");
+            Assert.Equal(1, count);
+        }
+
+
     }
 }

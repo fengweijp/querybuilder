@@ -1,5 +1,6 @@
  using System;
  using System.Collections.Generic;
+ using System.Data;
  using System.Data.Common;
  using System.Data.SqlClient;
  using System.Linq;
@@ -29,9 +30,9 @@ public class SqlServerDatabaseFixture : IExecutionDatabaseFixture
         Connection.ExecuteScalar("SELECT 1");
     }
 
-    public DbConnection Connection { get; private set; }
+    public IDbConnection Connection { get; private set; }
 
-    public DbConnection IsolatedConnection()
+    public IDbConnection IsolatedConnection()
     {
         var connection = GetConnection();
         _tracked.Add(new WeakReference<SqlConnection>(connection));
@@ -52,6 +53,7 @@ public class SqlServerDatabaseFixture : IExecutionDatabaseFixture
             }
             catch
             {
+
             }
         }
     }
