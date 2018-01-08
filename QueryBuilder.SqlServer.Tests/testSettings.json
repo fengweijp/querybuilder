@@ -2,7 +2,7 @@
   "ConnectionStrings": [
     {
       "name": "sqlserver",
-      "connectionString": "Data Source=localhost;Initial Catalog=sqlkata_tests;Integrated Security=true"
+      "connectionString": "Data Source=APPVYR-WIN\\SQL2014;Database=sqlkata;User ID=sa;Password=Password12!"
     }
   ]
 }

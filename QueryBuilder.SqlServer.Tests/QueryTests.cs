@@ -28,9 +28,10 @@ namespace QueryBuilder.SqlServer.Tests
                 .Offset(20);
 
             var r = query.Build(settings);
+            var rS = r.ToString();
             Assert.Equal(
-                "SELECT * FROM (SELECT [Id], ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS [row_num] FROM [TABLE]) AS [subquery] WHERE [row_num] >= 20",
-                r.RawSql);
+                "SELECT * FROM (SELECT [Id], ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS [row_num] FROM [TABLE]) AS [subquery] WHERE [row_num] >= 21",
+                rS);
         }
 
         [Fact]

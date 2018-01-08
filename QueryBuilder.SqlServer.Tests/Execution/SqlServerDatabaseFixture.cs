@@ -23,6 +23,7 @@ namespace QueryBuilder.SqlServer.Tests.Execution
         public SqlServerDatabaseFixture()
         {
             Connection = GetConnection();
+            Connection.Open();
             TestConnection();
         }
 
@@ -52,10 +53,7 @@ namespace QueryBuilder.SqlServer.Tests.Execution
                         cnn.Dispose();
                     }
                 }
-                catch
-                {
-
-                }
+                catch { }
             }
         }
     }

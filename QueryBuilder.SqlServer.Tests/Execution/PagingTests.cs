@@ -1,32 +1,35 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Dapper;
 using SqlKata;
 using Xunit;
+using SqlKata.Execution2;
 
 namespace QueryBuilder.SqlServer.Tests.Execution
 {
-    [Collection("PagingTests")]
+    [Collection(nameof(SqlTestCollection))]
     public class PagingTests : SqlServerDatabaseTest
     {
         private const string tablename = "TABLE";
 
         public PagingTests(SqlServerDatabaseFixture database) : base(database)
         {
-            SetUp().GetAwaiter().GetResult();
+            SetUp();
         }
 
-        async Task SetUp()
+        void SetUp()
         {
-//            await Connection.ExecuteAsync(@"
-//if object_id('"+tablename+"') is not null drop table ["+tablename+@"]
-//CREATE TABLE ["+tablename+"] ([num] int)");
+            Connection.Execute(@"
+if object_id('" + tablename + "') is not null drop table [" + tablename + @"]
+CREATE TABLE [" + tablename + "] ([Id] int)");
 
-//            string sql = string.Empty;
-//            for (int i = 0; i < numRows; i++)
-//            {
-//                sql += $"INSERT INTO [{tablename}] (num) VALUES ({i}){Environment.NewLine}";
-//            }
+            string sql = string.Empty;
+            for (int i = 0; i < 44; i++)
+            {
+                sql += $"INSERT INTO [{tablename}] (Id) VALUES ({i}){Environment.NewLine}";
+            }
 
-//            await Connection.ExecuteAsync(sql);
+            Connection.Execute(sql);
         }
 
         [Fact]

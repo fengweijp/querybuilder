@@ -18,6 +18,7 @@ namespace SqlKata.Tests
         public static readonly IConfigurationRoot CurrentConfigurationRoot = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("testSettings.json")
+            .AddJsonFile($"testSettings.dev.json",optional:true)
             .Build();
 
         public static IEnumerable<TestConnectionString> ConnectionStrings

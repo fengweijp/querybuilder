@@ -8,16 +8,33 @@ skip_commits:
     - '**/*.md'
 
 environment:
-  Appveyor: true
+  Appveyor: true 
+   # sql server
+  SQLSERVER_ENV_SQLSERVER_HOST: localhost
+  SQLSERVER_ENV_SQLSERVER_PORT: 1433
+  SQLSERVER_ENV_SQLSERVER_USER: sa
+  SQLSERVER_ENV_SQLSERVER_PASSWORD: Password12!
+  SQLSERVER_ENV_SQLSERVER_DATABASE: sqlkata
 
 services:
-init:
+  - mssql2014
+
+#rdp if needed
+# init:
+#   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+# on_finish:
+#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 nuget:
   account_feed: false
   project_feed: false
   disable_publish_on_pr: true
 
 build_script:
+ # sqlserver
+  - ps: .\appveyor.sqlserver.ps1 SQL2014
+  - sqlcmd -S localhost,1433 -U sa -P Password12! -Q "CREATE DATABASE sqlkata" -d "master"
+ #build
   - ps: .\build.ps1 -BuildNumber "$env:APPVEYOR_BUILD_NUMBER" -PullRequestNumber "$env:APPVEYOR_PULL_REQUEST_NUMBER" -RunTests
 
 test: off
