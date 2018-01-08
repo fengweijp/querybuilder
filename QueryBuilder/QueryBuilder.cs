@@ -5,16 +5,7 @@ namespace SqlKata
 {
     public sealed class QueryBuilder
     {
-        private static Func<QueryBuilderSettings> _defaultSettings;
-
-        public static Func<QueryBuilderSettings> DefaultSettings
-        {
-            get { return _defaultSettings; }
-            set
-            {
-                _defaultSettings = value;   
-            }
-        }
+        public static Func<QueryBuilderSettings> DefaultSettings { get; set; }
 
         private static QueryBuilderSettings GlobalSettings()
         {
@@ -24,7 +15,7 @@ namespace SqlKata
 
             if (settings.Compiler == null)
             {
-                settings.Compiler = new SqlServerCompiler();
+                throw new QueryBuilderException($"{nameof(settings.Compiler)} is null");
             }
             return settings;
         }
@@ -39,10 +30,25 @@ namespace SqlKata
         {
             if (settings == null)
             {
-                throw new Exception("Settings parameter is null");
+                throw new Exception($"{nameof(settings)} is null");
             }
 
             return settings.Compiler.Compile(query);
+        }
+    }
+
+    public class QueryBuilderException : Exception
+    {
+        public QueryBuilderException()
+        {
+        }
+
+        public QueryBuilderException(string message) : base(message)
+        {
+        }
+
+        public QueryBuilderException(string message, Exception innerException) : base(message, innerException)
+        {
         }
     }
 }
