@@ -15,7 +15,12 @@ namespace SqlKata
 
             if (settings.Compiler == null)
             {
-                throw new QueryBuilderException($"{nameof(settings.Compiler)} is null");
+                if (DefaultSettings != null)
+                {
+                    throw new QueryBuilderException($"{nameof(settings.Compiler)} is null");
+                }
+
+                settings.Compiler = new SqlServerCompiler();
             }
             return settings;
         }
@@ -30,7 +35,7 @@ namespace SqlKata
         {
             if (settings == null)
             {
-                throw new Exception($"{nameof(settings)} is null");
+                settings = GlobalSettings();
             }
 
             return settings.Compiler.Compile(query);
