@@ -37,8 +37,40 @@ namespace SqlKata.Execution
             return FirstOrDefault<dynamic>(query);
         }
 
+        public static PaginationResult<T> Paginate<T>(this Query query, int page, int perPage = 25)
+        {
 
-       
+            if (page < 1)
+            {
+                throw new ArgumentException("Page param should be greater than or equal to 1", nameof(page));
+            }
+
+            if (perPage < 1)
+            {
+                throw new ArgumentException("PerPage param should be greater than or equal to 1", nameof(perPage));
+            }
+
+            var xQuery = (XQuery)query;
+
+            var count = query.Clone().Count<long>();
+
+            var list = query.ForPage(page, perPage).Get<T>();
+
+            return new PaginationResult<T>
+            {
+                Query = query.Clone(),
+                Page = page,
+                PerPage = perPage,
+                Count = count,
+                List = list
+            };
+
+        }
+
+        public static PaginationResult<object> Paginate(this Query query, int page, int perPage = 25)
+        {
+            return query.Paginate<object>(page, perPage);
+        }
 
         public static T First<T>(this Query query)
         {
@@ -82,8 +114,5 @@ namespace SqlKata.Execution
 
             return xQuery.Connection.Execute(compiled.Sql, compiled.Bindings);
         }
-
-
-
     }
 }
