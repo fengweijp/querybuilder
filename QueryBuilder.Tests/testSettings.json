@@ -1,0 +1,10 @@
+﻿{
+  "settings": {
+    "ConnectionStrings": [
+      {
+        "name": "sqlserver",
+        "connectionString": "Data Source=localhost;Initial Catalog=sqlkata_tests;Integrated Security=true"
+      }
+    ]
+  }
+}
