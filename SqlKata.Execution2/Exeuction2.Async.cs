@@ -6,7 +6,7 @@ using Dapper;
 
 namespace SqlKata.Execution2
 {
-    public static partial class SqlMapper
+    public static partial class Execution2
     {
         /* Generated from source via roslyn, can use improvement ;D */
 

@@ -2,11 +2,10 @@
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
-using SqlKata.Execution;
 
 namespace SqlKata.Execution2
 {
-    public partial class SqlMapper
+    public partial class Execution2
     { 
         public static async Task<PaginationResult<T>> PaginateAsync<T>(this IDbConnection cnn, Query query, int page, int perPage = 25,
             QueryBuilderSettings settings=null, IDbTransaction transaction = null, int? commandTimeout = null)
@@ -21,9 +20,9 @@ namespace SqlKata.Execution2
                 throw new ArgumentException("PerPage param should be greater than or equal to 1", nameof(perPage));
             }
 
-            var count = await cnn.CountAsync<long>(query.AsCount(), settings, transaction, commandTimeout);
-
-            var list = await cnn.QueryAsync<T>(query.ForPage(page, perPage), settings, transaction, commandTimeout);
+            var count = await cnn.CountAsync<long>(query.Clone().AsCount(), settings, transaction, commandTimeout);
+            var pageQuery = query.Clone().ForPage(page, perPage);
+            var list = await cnn.QueryAsync<T>(pageQuery, settings, transaction, commandTimeout);
 
             return new PaginationResult<T>
             {
@@ -33,7 +32,7 @@ namespace SqlKata.Execution2
                 List = list,
                 Page = page,
                 PerPage = perPage,
-                Query = query.Clone(),
+                Query = query,
                 Transaction = transaction
             };
 

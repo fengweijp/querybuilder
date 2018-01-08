@@ -7,13 +7,13 @@ using Dapper;
 
 namespace SqlKata.Execution2
 {
-    public static partial class SqlMapper
+    public static partial class Execution2
     {
-        public static async Task<T> Aggregate<T>(this IDbConnection cnn, Query query,
-            string aggregateOp,IEnumerable<string> columns = null, QueryBuilderSettings settings = null, IDbTransaction transaction = null, int? commandTimeout = null)
+        public static async Task<T> AggregateAsync<T>(this IDbConnection cnn, Query query,
+            string AggregateAsyncOp,IEnumerable<string> columns = null, QueryBuilderSettings settings = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
             var result = query
-                .AsAggregate(aggregateOp, columns.ToArray())
+                .AsAggregate(AggregateAsyncOp, columns.ToArray())
                 .Build(settings);
 
             return await cnn.ExecuteScalarAsync<T>(result.Sql, result.Bindings, transaction, commandTimeout);
@@ -26,28 +26,28 @@ namespace SqlKata.Execution2
             return await cnn.ExecuteScalarAsync<T>(result.Sql, result.Bindings, transaction, commandTimeout);
         }
 
-        public static async Task<T> Average<T>(this IDbConnection cnn, Query query, string column,
+        public static async Task<T> AverageAsync<T>(this IDbConnection cnn, Query query, string column,
             QueryBuilderSettings settings = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
-            return await cnn.Aggregate<T>(query,"avg", new []{column},settings,transaction,commandTimeout);
+            return await cnn.AggregateAsync<T>(query,"avg", new []{column},settings,transaction,commandTimeout);
         }
 
-        public static async Task<T> Sum<T>(this IDbConnection cnn, Query query, string column,
+        public static async Task<T> SumAsync<T>(this IDbConnection cnn, Query query, string column,
             QueryBuilderSettings settings = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
-            return await cnn.Aggregate<T>(query, "sum", new[] { column }, settings, transaction, commandTimeout);
+            return await cnn.AggregateAsync<T>(query, "sum", new[] { column }, settings, transaction, commandTimeout);
         }
 
-        public static async Task<T> Min<T>(this IDbConnection cnn, Query query, string column,
+        public static async Task<T> MinAsync<T>(this IDbConnection cnn, Query query, string column,
             QueryBuilderSettings settings = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
-            return await cnn.Aggregate<T>(query, "min", new[] { column }, settings, transaction, commandTimeout);
+            return await cnn.AggregateAsync<T>(query, "min", new[] { column }, settings, transaction, commandTimeout);
         }
 
-        public static async Task<T> Max<T>(this IDbConnection cnn, Query query, string column,
+        public static async Task<T> MaxAsync<T>(this IDbConnection cnn, Query query, string column,
             QueryBuilderSettings settings = null, IDbTransaction transaction = null, int? commandTimeout = null)
         {
-            return await cnn.Aggregate<T>(query, "max", new[] { column }, settings, transaction, commandTimeout);
+            return await cnn.AggregateAsync<T>(query, "max", new[] { column }, settings, transaction, commandTimeout);
         }
     }
 }
