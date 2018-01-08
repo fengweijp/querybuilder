@@ -1,11 +1,14 @@
 ﻿using System;
 using SqlKata;
+using SqlKata.Tests;
 using Xunit;
 
 namespace QueryBuilder.SqlServer.Tests
 {
     public partial class QueryTests
     {
+        private QueryBuilderSettings settings = QueryBuilderTests.DefSqlServerSettings;
+
         [Fact]
         public void CanCompileLimit()
         {
@@ -13,7 +16,7 @@ namespace QueryBuilder.SqlServer.Tests
                 .Select("Id")
                 .Limit(5);
 
-            var r = query.Build();
+            var r = query.Build(settings);
             Assert.Equal("SELECT TOP (5) [Id] FROM [TABLE]", r.ToString());
         }
 
@@ -24,7 +27,7 @@ namespace QueryBuilder.SqlServer.Tests
                 .Select("Id")
                 .Offset(20);
 
-            var r = query.Build();
+            var r = query.Build(settings);
             Assert.Equal(
                 "SELECT * FROM (SELECT [Id], ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS [row_num] FROM [TABLE]) AS [subquery] WHERE [row_num] >= 20",
                 r.RawSql);
@@ -38,7 +41,7 @@ namespace QueryBuilder.SqlServer.Tests
                 .Limit(5)
                 .Offset(20);
 
-            var r = query.Build();
+            var r = query.Build(settings);
             Assert.Equal("SELECT * FROM (SELECT [Id], ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS [row_num] FROM [TABLE]) AS [subquery] WHERE [row_num] BETWEEN 21 AND 25",r.ToString());
         }
 
@@ -50,7 +53,7 @@ namespace QueryBuilder.SqlServer.Tests
                 .Skip(20)
                 .Take(5);
 
-            var r = query.Build();
+            var r = query.Build(settings);
             Assert.Equal("SELECT * FROM (SELECT [Id], ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS [row_num] FROM [TABLE]) AS [subquery] WHERE [row_num] BETWEEN 21 AND 25", r.ToString());
         }
 
@@ -61,7 +64,7 @@ namespace QueryBuilder.SqlServer.Tests
                 .Select("Id")
                 .ForPage(5, 5);
 
-            var r = query.Build();
+            var r = query.Build(settings);
             Assert.Equal("SELECT * FROM (SELECT [Id], ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS [row_num] FROM [TABLE]) AS [subquery] WHERE [row_num] BETWEEN 21 AND 25", r.ToString());
         }
     }
