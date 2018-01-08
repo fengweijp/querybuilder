@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
@@ -21,17 +20,16 @@ namespace SqlKata.Tests
             .AddJsonFile("testSettings.json")
             .Build();
 
-        public static QueryBuilderTestSettings Current
+        public static IEnumerable<TestConnectionString> ConnectionStrings
         {
             get
             {
-                var sett = new QueryBuilderTestSettings();
-                CurrentConfigurationRoot.Bind(sett);
+                var sett = new List<TestConnectionString>();
+                CurrentConfigurationRoot.GetSection("ConnectionStrings").Bind(sett);
                 return sett;
             }
         }
 
-        public List<TestConnectionString> ConnectionString { get; set; }
     }
 
 
