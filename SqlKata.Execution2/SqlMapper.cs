@@ -27,11 +27,14 @@ namespace SqlKata.Execution2
 
             return new PaginationResult<T>
             {
-                Query = query.Clone(),
+                CommandTimeout = commandTimeout,
+                Connection = cnn,
+                Count = count,
+                List = list,
                 Page = page,
                 PerPage = perPage,
-                Count = count,
-                List = list
+                Query = query.Clone(),
+                Transaction = transaction
             };
 
         }

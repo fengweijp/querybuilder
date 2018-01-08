@@ -16,7 +16,7 @@ namespace SqlKata.Execution
 
             while (CurrentPage.HasNext)
             {
-                CurrentPage = CurrentPage.Next();
+                CurrentPage = CurrentPage.NextAsync().GetAwaiter().GetResult();
                 yield return CurrentPage;
             }
 
