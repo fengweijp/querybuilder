@@ -55,12 +55,6 @@ INSERT INTO agg VALUES (5);");
         }
 
         [Fact]
-        public void CanUseSql()
-        {
-            Connection.ExecuteScalar("SELECT 1");
-        }
-
-        [Fact]
         public async Task CanSumData()
         {
             var query = new Query("agg");
