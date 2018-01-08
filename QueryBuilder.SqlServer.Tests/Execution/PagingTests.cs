@@ -1,11 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Dapper;
+﻿using System.Threading.Tasks;
 using SqlKata;
 using Xunit;
-using SqlKata.Execution2;
 
-namespace QueryBuilder.SqlServer.Tests
+namespace QueryBuilder.SqlServer.Tests.Execution
 {
     [Collection("PagingTests")]
     public class PagingTests : SqlServerDatabaseTest

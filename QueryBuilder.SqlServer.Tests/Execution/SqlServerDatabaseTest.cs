@@ -2,7 +2,7 @@ using System.Data.SqlClient;
 using SqlKata.Tests.Execution;
 using Xunit;
 
-namespace QueryBuilder.SqlServer.Tests
+namespace QueryBuilder.SqlServer.Tests.Execution
 {
     public abstract class SqlServerDatabaseTest : IClassFixture<SqlServerDatabaseFixture>
     {

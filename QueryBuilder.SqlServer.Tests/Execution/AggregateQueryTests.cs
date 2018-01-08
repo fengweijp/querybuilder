@@ -1,12 +1,9 @@
-﻿using System;
-using System.Configuration;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Dapper;
 using SqlKata;
-using SqlKata.Execution2;
 using Xunit;
 
-namespace QueryBuilder.SqlServer.Tests
+namespace QueryBuilder.SqlServer.Tests.Execution
 {
     [Collection("AggregateSimpleTests")]
     public class AggregateQueryTests : SqlServerDatabaseTest
